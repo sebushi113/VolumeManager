@@ -323,6 +323,9 @@ class Service : AccessibilityService() {
     override fun onInterrupt() {
     }
 
+    private val handler = android.os.Handler()
+    private val showViewRunnable = Runnable { showView() }
+
     override fun onKeyEvent(event: KeyEvent): Boolean {
         Log.i(TAG, "onKeyEvent ${event.action} ${event.keyCode}")
 
@@ -338,7 +341,8 @@ class Service : AccessibilityService() {
                             AudioManager.ADJUST_RAISE, AudioManager.USE_DEFAULT_STREAM_TYPE, 0
                         )
                     }
-                    showView()
+                    handler.removeCallbacks(showViewRunnable)
+                    handler.postDelayed(showViewRunnable, 150)
                 }
                 return true
             }
@@ -350,7 +354,8 @@ class Service : AccessibilityService() {
                             AudioManager.ADJUST_LOWER, AudioManager.USE_DEFAULT_STREAM_TYPE, 0
                         )
                     }
-                    showView()
+                    handler.removeCallbacks(showViewRunnable)
+                    handler.postDelayed(showViewRunnable, 150)
                 }
                 return true
             }
